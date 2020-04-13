@@ -123,6 +123,30 @@ class TripletLoss(object):
         return loss, dist_ap, dist_an
 
 
+class CEWithLabelSmooth(nn.Module):
+    def __init__(self, num_classes, epsilon=0.1):
+        super(CEWithLabelSmooth, self).__init__()
+        self.epsilon=epsilon
+        self.num_classes=num_classes
+
+    def forward(self, inputs, targets):
+        """
+
+        :param inputs: scores (bs,num_classes)
+        :param targets: (num_classes)
+        :return: loss value
+        """
+        targets=torch.zeros(inputs.size)
+        targets = (1 - self.epsilon) * targets + self.epsilon / self.num_classes
+        targets=targets.gpu()
+        #score convert to prob
+        inputs=-nn.LogSoftmax(dim=1)(inputs)
+        loss=inputs*targets
+        loss=loss.cpu().mean(0).sum()
+        return loss
+
+
+
 class CrossEntropyLabelSmooth(nn.Module):
     """Cross entropy loss with label smoothing regularizer.
     Reference:

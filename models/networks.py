@@ -195,12 +195,12 @@ class StrongBaseline(nn.Module):
         predict.append(bn_global_feat)
 
         #local
-        local_feat=self.gmp(features)
-        local_feat=local_feat.view(features.size(0), -1)
-        mask_feat=self.drop(local_feat)
+        mask_feat=self.drop(features)
+        mask_feat=self.gmp(mask_feat)
+        mask_feat=mask_feat.view(features.size(0), -1)
         bn_mask_feat=self.local_bn(mask_feat)
         local_logits=self.local_classifier(bn_mask_feat)
-        tri_feat.append(local_feat)
+        tri_feat.append(mask_feat)
         logits_feat.append(local_logits)
         predict.append(bn_mask_feat)
 
