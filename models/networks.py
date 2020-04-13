@@ -152,7 +152,7 @@ class StrongBaseline(nn.Module):
             Bottleneck(2048, 512),
             Bottleneck(2048, 512)
         )
-        layer4.load_state_dict(resnet.state_dict())  #use resnet weight
+        layer4.load_state_dict(resnet.layer4.state_dict())  #use resnet weight
         self.backbone=nn.Sequential(
             resnet.conv1,
             resnet.bn1,
