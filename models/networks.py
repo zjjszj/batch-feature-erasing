@@ -145,12 +145,12 @@ class StrongBaseline(nn.Module):
         super(StrongBaseline, self).__init__()
         resnet=resnet50(True)
         layer4=nn.Sequential(
-            Bottleneck(1024,2048,downsample=nn.Sequential(
+            Bottleneck(1024,512,downsample=nn.Sequential(
                 nn.Conv2d(1024,2048,3,1,padding=1),
                 nn.BatchNorm2d(2048)
             )),
-            Bottleneck(1024, 2048),
-            Bottleneck(1024, 2048)
+            Bottleneck(2048, 512),
+            Bottleneck(2048, 512)
         )
         layer4.apply(weights_init_kaiming)  #weights_init_kaiming difference with liaoxingyu
         self.backbone=nn.Sequential(
