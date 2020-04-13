@@ -152,7 +152,7 @@ class StrongBaseline(nn.Module):
             Bottleneck(2048, 512),
             Bottleneck(2048, 512)
         )
-        layer4.apply(resnet.state_dict())  #use resnet weight
+        layer4.load_state_dict(resnet.state_dict())  #use resnet weight
         self.backbone=nn.Sequential(
             resnet.conv1,
             resnet.bn1,
@@ -168,10 +168,12 @@ class StrongBaseline(nn.Module):
         self.bn=nn.BatchNorm1d(2048)
         self.bn.bias.requires_grad_(False)  #b=0
         self.bn.apply(weights_init_kaiming)   #weights_init_kaiming difference with liaoxingyu
-        self.classifier=nn.Linear(2048, num_classes, bias=False)
+        self.classifier=nn.Linear(2048, num_classes, bias=False)  #bias=False
         self.classifier.apply(weights_init_classifier)
 
         #local
+        self.bottleneck=Bottleneck(2048,512)  #local use it
+        self.bottleneck.apply(weights_init_kaiming)
         self.gmp=nn.AdaptiveMaxPool2d(1)
         self.local_bn=nn.BatchNorm1d(2048)
         self.local_bn.bias.requires_grad_(False)
@@ -195,6 +197,7 @@ class StrongBaseline(nn.Module):
         predict.append(bn_global_feat)
 
         #local
+        features=self.bottleneck(features)
         mask_feat=self.drop(features)
         mask_feat=self.gmp(mask_feat)
         mask_feat=mask_feat.view(features.size(0), -1)
