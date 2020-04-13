@@ -12,11 +12,11 @@ class DefaultConfig(object):
     mode = 'retrieval'
     # optimization options
     loss = 'triplet'
-    optim = 'sgd'
+    optim = 'adam'
     max_epoch = 60
     train_batch = 32 
     test_batch = 32
-    adjust_lr = True
+    adjust_lr = False
     lr = 0.001
     gamma = 0.1
     weight_decay = 5e-4
