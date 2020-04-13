@@ -146,7 +146,7 @@ class StrongBaseline(nn.Module):
         resnet=resnet50(True)
         layer4=nn.Sequential(
             Bottleneck(1024,512,downsample=nn.Sequential(
-                nn.Conv2d(1024,2048,3,1,padding=1),
+                nn.Conv2d(1024,2048,1,1,bias=False),
                 nn.BatchNorm2d(2048)
             )),
             Bottleneck(2048, 512),
