@@ -136,14 +136,19 @@ class CEWithLabelSmooth(nn.Module):
         :param targets: (num_classes)
         :return: loss value
         """
-        targets=torch.zeros(inputs.size)
+        targets=torch.zeros(inputs.size).scatter_(1, targets.cpu(), 1)
         targets = (1 - self.epsilon) * targets + self.epsilon / self.num_classes
         targets=targets.gpu()
         #score convert to prob
-        inputs=-nn.LogSoftmax(dim=1)(inputs)
-        loss=inputs*targets
-        loss=loss.cpu().mean(0).sum()
+        probs=nn.LogSoftmax(dim=1)(inputs)
+        loss=(-probs*targets).mean(0).sum()
         return loss
+
+
+class CenterLoss(nn.Module):
+    def __init__(self):
+        super(CenterLoss, self).__init__()
+
 
 
 
