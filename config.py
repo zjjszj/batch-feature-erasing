@@ -30,7 +30,7 @@ class DefaultConfig(object):
     re_ranking = False
 
     # model options
-    model_name = 'bfe'  # triplet, softmax_triplet, bfe, ide
+    model_name = 'strongBaseline'  # triplet, softmax_triplet, bfe, ide, strongBaseline
     last_stride = 1
     pretrained_model = None
     

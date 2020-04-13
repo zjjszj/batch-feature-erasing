@@ -15,7 +15,7 @@ from config import opt
 from datasets import data_manager
 from datasets.data_loader import ImageData
 from datasets.samplers import RandomIdentitySampler
-from models.networks import ResNetBuilder, IDE, Resnet, BFE
+from models.networks import ResNetBuilder, IDE, Resnet, BFE, StrongBaseline
 from trainers.evaluator import ResNetEvaluator
 from trainers.trainer import cls_tripletTrainer
 from utils.loss import CrossEntropyLabelSmooth, TripletLoss, Margin
@@ -96,6 +96,8 @@ def train(**kwargs):
         model = IDE(dataset.num_train_pids)
     elif opt.model_name == 'resnet':
         model = Resnet(dataset.num_train_pids)
+    elif opt.model_name=='strongBaseline':
+        model=StrongBaseline(dataset.num_train_pids)
 
     optim_policy = model.get_optim_policy()
 
