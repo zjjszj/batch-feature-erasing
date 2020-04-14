@@ -173,7 +173,6 @@ class StrongBaseline(nn.Module):
 
         #local
         self.bottleneck=Bottleneck(2048,512)  #local use it
-        self.bottleneck.apply(weights_init_kaiming)
         self.gmp=nn.AdaptiveMaxPool2d(1)
         self.local_bn=nn.BatchNorm1d(2048)
         self.local_bn.bias.requires_grad_(False)

@@ -36,7 +36,7 @@ class DefaultConfig(object):
     
     # miscs
     print_freq = 30
-    eval_step = 50
+    eval_step = 10
     save_dir = './pytorch-ckpt/market'
     workers = 10
     start_epoch = 0
