@@ -18,7 +18,7 @@ from datasets.samplers import RandomIdentitySampler
 from models.networks import ResNetBuilder, IDE, Resnet, BFE, StrongBaseline
 from trainers.evaluator import ResNetEvaluator
 from trainers.trainer import cls_tripletTrainer
-from utils.loss import CrossEntropyLabelSmooth, TripletLoss, Margin
+from utils.loss import CrossEntropyLabelSmooth, TripletLoss, Margin, MyCenterLoss
 from utils.LiftedStructure import LiftedStructureLoss
 from utils.DistWeightDevianceLoss import DistWeightBinDevianceLoss
 from utils.serialization import Logger, save_checkpoint
@@ -120,17 +120,27 @@ def train(**kwargs):
 
     #xent_criterion = nn.CrossEntropyLoss()
     xent_criterion = CrossEntropyLabelSmooth(dataset.num_train_pids)
+    center_optimizer=None
 
+    embedding_criterion=[]
     if opt.loss == 'triplet':
-        embedding_criterion = TripletLoss(opt.margin)
+        embedding_criterion.append(TripletLoss(opt.margin))
     elif opt.loss == 'lifted':
-        embedding_criterion = LiftedStructureLoss(hard_mining=True)
+        embedding_criterion.append(LiftedStructureLoss(hard_mining=True))
     elif opt.loss == 'weight':
-        embedding_criterion = Margin()
+        embedding_criterion.append( Margin())
+    elif opt.loss=='triplet+center':
+        center_ct=MyCenterLoss(dataset.num_train_pids)
+        embedding_criterion.append(TripletLoss(opt.margin))
+        embedding_criterion.append(center_ct)
+
+        center_optimizer=torch.optim.SGD(center_ct.parameters(), lr=opt.center_lr)
 
     def criterion(triplet_y, softmax_y, labels):
-        losses = [embedding_criterion(output, labels)[0] for output in triplet_y] + \
-                     [xent_criterion(output, labels) for output in softmax_y]
+
+        losses=[embedding_criterion[0](output, labels) for output in triplet_y] + \
+        [opt.center_weight*item for item in [embedding_criterion[1](output, labels) for output in triplet_y]] if opt.loss=='triplet+center' else [0]+ \
+        [xent_criterion(output, labels) for output in softmax_y]
         loss = sum(losses)
         return loss
 
@@ -143,7 +153,7 @@ def train(**kwargs):
 
     start_epoch = opt.start_epoch
     # get trainer and evaluator
-    reid_trainer = cls_tripletTrainer(opt, model, optimizer, criterion, summary_writer)
+    reid_trainer = cls_tripletTrainer(opt, model, optimizer, criterion, summary_writer, center_optimizer)
 
     def adjust_lr(optimizer, ep):
         if ep < 50:

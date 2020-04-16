@@ -10,12 +10,13 @@ from utils.loss import euclidean_dist, hard_example_mining
 from utils.meters import AverageMeter
 
 class cls_tripletTrainer:
-    def __init__(self, opt, model, optimzier, criterion, summary_writer):
+    def __init__(self, opt, model, optimzier, criterion, summary_writer, center_optimizer=None):
         self.opt = opt
         self.model = model
         self.optimizer= optimzier
         self.criterion = criterion
         self.summary_writer = summary_writer
+        self.center_optimizer=center_optimizer
 
     def train(self, epoch, data_loader):
         self.model.train()
@@ -32,8 +33,12 @@ class cls_tripletTrainer:
             self._parse_data(inputs)            ##数据转换成了cuda()
             self._forward()
             self.optimizer.zero_grad()
+            if not self.center_optimizer is None:
+                self.center_optimizer.zero_grad()
             self._backward()
             self.optimizer.step()
+            if not self.center_optimizer is None:
+                self.center_optimizer.step()
 
             batch_time.update(time.time() - start)
             losses.update(self.loss.item())

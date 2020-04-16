@@ -145,11 +145,47 @@ class CEWithLabelSmooth(nn.Module):
         return loss
 
 
-class CenterLoss(nn.Module):
-    def __init__(self):
-        super(CenterLoss, self).__init__()
+from torch.autograd.function import Function
+class MyCenterLoss(nn.Module):
+    def __init__(self, num_classes=751, feat_dim=2048, size_average=True):
+        super(MyCenterLoss, self).__init__()
+        self.feat_dim=feat_dim
+        self.size_average=size_average
+        self.centers=nn.Parameter(torch.ones((num_classes, feat_dim)).cuda())
+        self.centerloss=ComputeCenterLoss.apply
+
+    def forward(self, inputs, labels):
+        """
+        my version(why is the author`s version so complex?)
+        :param inputs:(bs, feats)
+        :param labels:
+        :return:
+        """
+        assert inputs.size(1)==self.feat_dim, 'inputs`s dim{0} should be equal to {1}'.format(inputs.size(1), self.feat_dim)
+
+        batch_size=torch.tensor(inputs.size(0)) if self.size_average else torch.tensor(1)
+        loss=self.centerloss(inputs, labels, self.centers, batch_size)
+        return loss
 
 
+class ComputeCenterLoss(Function):
+    @staticmethod
+    def forward(ctx, inputs, labels, centers, batch_size):
+        ctx.save_for_backward(inputs, labels, centers, batch_size)
+        difference = inputs - centers[labels]
+        loss = torch.pow(difference, 2).clamp(min=1e-12, max=1e+12).sum() / batch_size
+        return loss
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        inputs, labels, centers, batch_size=ctx.saved_tensors
+        grad_inputs=inputs-centers[labels]
+        grad_centers=centers.new_zeros((centers.size()))
+        grad_centers.scatter_add_(dim=0, index=labels.unsqueeze(1).expand(grad_inputs.size()), src=-grad_inputs)
+        counts=centers.new_ones(centers.size(0))
+        counts.scatter_add_(0, labels, inputs.new_ones(labels.size()))
+        grad_centers=grad_centers/counts.unsqueeze(1)
+        return grad_inputs*grad_output/batch_size, None, (grad_centers/batch_size), None
 
 
 class CrossEntropyLabelSmooth(nn.Module):

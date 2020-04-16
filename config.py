@@ -11,7 +11,7 @@ class DefaultConfig(object):
     datatype = 'person'
     mode = 'retrieval'
     # optimization options
-    loss = 'triplet'
+    loss = 'triplet+center'  #triplet
     optim = 'adam'
     max_epoch = 60
     train_batch = 32 
@@ -41,6 +41,11 @@ class DefaultConfig(object):
     workers = 10
     start_epoch = 0
     best_rank = -np.inf
+
+    #center loss
+    center_weight=0.0005
+    center_lr=0.5
+
 
     def _parse(self, kwargs):
         for k, v in kwargs.items():

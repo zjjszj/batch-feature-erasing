@@ -172,7 +172,7 @@ class StrongBaseline(nn.Module):
         self.classifier.apply(weights_init_classifier)
 
         #local
-        self.bottleneck=Bottleneck(2048,512)  #local use it
+        self.bottleneck=Bottleneck(2048,512)  #local use it and can`t initial
         self.gmp=nn.AdaptiveMaxPool2d(1)
         self.local_bn=nn.BatchNorm1d(2048)
         self.local_bn.bias.requires_grad_(False)
