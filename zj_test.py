@@ -139,6 +139,4 @@ from torchvision import transforms as T
 
 
 if __name__=='__main__':
-    a=[2,3]
-    b=[2,3]
-    print(2*a)
+   print('{}'.format(''))
