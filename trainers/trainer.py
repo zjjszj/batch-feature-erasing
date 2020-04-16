@@ -63,7 +63,7 @@ class cls_tripletTrainer:
         print('Epoch: [{}]\tEpoch Time {:.3f} s\tLoss {:.3f}\t'
               'Lr {:.2e}\t''{}'
               .format(epoch, batch_time.sum, losses.mean, param_group[0]['lr'],
-                      'center_lr='+self.center_optimizer.param_groups[0]['lr'] if not self.center_optimizer is None else ''))
+                      'center_lr='+str(self.center_optimizer.param_groups[0]['lr']) if not self.center_optimizer is None else ''))
         print()
 
     def _parse_data(self, inputs):

@@ -139,4 +139,4 @@ from torchvision import transforms as T
 
 
 if __name__=='__main__':
-   print('{}'.format(''))
+   print('cen'+str(2.22))
