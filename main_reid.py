@@ -141,6 +141,10 @@ def train(**kwargs):
         losses=[embedding_criterion[0](output, labels) for output in triplet_y] + \
         [opt.center_weight*item for item in [embedding_criterion[1](output, labels) for output in triplet_y]] if opt.loss=='triplet+center' else [0]+ \
         [xent_criterion(output, labels) for output in softmax_y]
+        print([embedding_criterion[0](output, labels) for output in triplet_y])
+        print([opt.center_weight*item for item in [embedding_criterion[1](output, labels) for output in triplet_y]] if opt.loss=='triplet+center' else [0])
+        print('losses==', losses)
+        print([xent_criterion(output, labels) for output in softmax_y])
         loss = sum(losses)
         return loss
 
