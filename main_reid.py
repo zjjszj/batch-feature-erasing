@@ -130,7 +130,7 @@ def train(**kwargs):
     elif opt.loss == 'weight':
         embedding_criterion.append( Margin())
     elif opt.loss=='triplet+center':
-        center_ct=MyCenterLoss(dataset.num_train_pids)
+        center_ct=MyCenterLoss(dataset.num_train_pids).cuda()  #self.centers 为cuda类型
         embedding_criterion.append(TripletLoss(opt.margin))
         embedding_criterion.append(center_ct)
 
