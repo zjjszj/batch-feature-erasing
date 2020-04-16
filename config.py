@@ -14,7 +14,7 @@ class DefaultConfig(object):
     loss = 'triplet+center'  #triplet
     optim = 'adam'
     max_epoch = 60
-    train_batch = 2
+    train_batch = 32
     test_batch = 32
     adjust_lr = False
     lr = 0.0001
