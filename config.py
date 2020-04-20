@@ -11,7 +11,7 @@ class DefaultConfig(object):
     datatype = 'person'
     mode = 'retrieval'
     # optimization options
-    loss = 'triplet+center'  #triplet
+    loss = 'triplet'  #triplet triplet+center
     optim = 'adam'
     max_epoch = 60
     train_batch = 64
@@ -27,7 +27,7 @@ class DefaultConfig(object):
     num_gpu = 1
     evaluate = False
     savefig = None 
-    re_ranking = False
+    re_ranking = True
 
     # model options
     model_name = 'strongBaseline'  # triplet, softmax_triplet, bfe, ide, strongBaseline

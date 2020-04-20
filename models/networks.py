@@ -139,7 +139,7 @@ class ResNetBuilder(nn.Module):
                 {'params': base_param_group}
             ]
 
-
+import gc
 class StrongBaseline(nn.Module):
     def __init__(self, num_classes, width_ratio=0.5, height_ratio=0.5):
         super(StrongBaseline, self).__init__()
@@ -181,6 +181,7 @@ class StrongBaseline(nn.Module):
         self.local_classifier.apply(weights_init_classifier)
         self.drop=BatchDrop(height_ratio, width_ratio)
 
+
     def forward(self, x):
         tri_feat, logits_feat, predict=[], [], []
         x=self.backbone(x)
@@ -208,6 +209,8 @@ class StrongBaseline(nn.Module):
 
         if not self.training:
             return torch.cat(predict, dim=1)
+        del features
+        gc.collect()
         return tri_feat, logits_feat
 
     def get_optim_policy(self):
