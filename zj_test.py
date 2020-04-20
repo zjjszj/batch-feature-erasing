@@ -136,7 +136,11 @@ import os
 
 from PIL import Image
 from torchvision import transforms as T
-
+import gc
 
 if __name__=='__main__':
-   print('cen'+str(2.22))
+   a=1
+   b=a
+   del a, b
+   gc.collect()
+   print(a)

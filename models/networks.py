@@ -209,7 +209,7 @@ class StrongBaseline(nn.Module):
 
         if not self.training:
             return torch.cat(predict, dim=1)
-        del features
+        del features, x
         gc.collect()
         return tri_feat, logits_feat
 
