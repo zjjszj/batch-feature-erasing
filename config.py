@@ -14,10 +14,10 @@ class DefaultConfig(object):
     loss = 'triplet'  #triplet triplet+center
     optim = 'adam'
     max_epoch = 60
-    train_batch = 64
+    train_batch = 32
     test_batch = 32
     adjust_lr = False
-    lr = 0.0001
+    lr = 0.0004
     gamma = 0.1
     weight_decay = 5e-4
     momentum = 0.9
