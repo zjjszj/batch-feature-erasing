@@ -66,7 +66,6 @@ class Market1501(object):
             raise RuntimeError("'{}' is not available".format(self.gallery_dir))
 
     def _process_dir(self, dir_path, relabel=False):
-        print(dir_path)
         if dir_path.split('/')[-1]=="bounding_box_train":
             img_names = os.listdir(dir_path)[:196]
         else:

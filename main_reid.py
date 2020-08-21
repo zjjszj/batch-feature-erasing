@@ -118,7 +118,7 @@ def train(**kwargs):
 
     #xent_criterion = nn.CrossEntropyLoss()
     criterion = CrossEntropyLabelSmooth(10)
-    epochs=10
+    epochs=100
     best=0.0
     b_e=0
     for e in range(epochs):
@@ -134,7 +134,7 @@ def train(**kwargs):
             print('epoch=%s\tbatch loss=%s' ,e, loss)
         # val
         rank1=test(model, queryloader)
-        print('epoch=%s\trank1=%s', e, rank1)
+        print('epoch=%s \t rank1=%s')%(e, loss.item())
         if rank1>best:
             # save best
             b_e=e
