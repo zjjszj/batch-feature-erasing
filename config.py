@@ -17,7 +17,7 @@ class DefaultConfig(object):
     train_batch = 32
     test_batch = 32
     adjust_lr = False
-    lr = 0.0004
+    lr = 0.001
     gamma = 0.1
     weight_decay = 5e-4
     momentum = 0.9

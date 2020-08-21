@@ -131,7 +131,7 @@ def train(**kwargs):
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            print(('epoch=%s\tbatch loss=%s') %(e, loss.item()))
+            print(('epoch=%s \t batch loss=%s') %(e, loss.item()))
         # val
         #rank1=test(model, queryloader)
         # print(('epoch=%s \t rank1=%s') % (e, rank1))
