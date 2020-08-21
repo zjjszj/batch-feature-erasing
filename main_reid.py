@@ -121,7 +121,7 @@ def train(**kwargs):
     epochs=10
     best=0.0
     b_e=0
-    for e in epochs:
+    for e in range(epochs):
         model.train()
         for i, inputs in enumerate(trainloader):
             imgs, pid, _=inputs
