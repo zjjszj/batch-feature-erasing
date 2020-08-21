@@ -1,5 +1,5 @@
 
 from torchvision.models.resnet import resnet18
 
-r=resnet18()
-print(r)
+print(('%s %s') % (2, 3))
+

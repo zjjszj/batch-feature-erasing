@@ -134,7 +134,7 @@ def train(**kwargs):
             print('epoch=%s\tbatch loss=%s' ,e, loss)
         # val
         rank1=test(model, queryloader)
-        print('epoch=%s \t rank1=%s')%(e, loss.item())
+        print(('epoch=%s \t rank1=%s')%(e, loss.item()))
         if rank1>best:
             # save best
             b_e=e
