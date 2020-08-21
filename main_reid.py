@@ -131,18 +131,18 @@ def train(**kwargs):
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            print('epoch=%s\tbatch loss=%s' ,e, loss)
+            print(('epoch=%s\tbatch loss=%s') %(e, loss.item()))
         # val
-        rank1=test(model, queryloader)
-        print(('epoch=%s \t rank1=%s')%(e, loss.item()))
-        if rank1>best:
-            # save best
-            b_e=e
-            state_dict = model.module.state_dict()
-            save_checkpoint({'state_dict': state_dict, 'epoch': e + 1},
-                is_best=True, save_dir=opt.save_dir,
-                filename='best' + '.pth.tar')
-    print('Best rank-1 {:.1%}, achived at epoch {}'.format(best, b_e))
+        #rank1=test(model, queryloader)
+        # print(('epoch=%s \t rank1=%s') % (e, rank1))
+        # if rank1>best:
+        #     # save best
+        #     b_e=e
+        #     state_dict = model.module.state_dict()
+        #     save_checkpoint({'state_dict': state_dict, 'epoch': e + 1},
+        #         is_best=True, save_dir=opt.save_dir,
+        #         filename='best' + '.pth.tar')
+    # print('Best rank-1 {:.1%}, achived at epoch {}'.format(best, b_e))
 
 def test(model, queryloader):
     model.eval()
